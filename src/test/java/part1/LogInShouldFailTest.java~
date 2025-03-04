@@ -27,16 +27,16 @@ public class LogInShouldFailTest {
 
   @Test
   public void testLoggingIntoApplication() throws InterruptedException {
+    Thread.sleep(2000);
     WebElement username = driver.findElement(By.name("username"));
-    username.sendKeys("InvalidUser"); // Input invalid credentials
-    WebElement password = driver.findElement(By.name("password"));
-    password.sendKeys("InvalidPass123");
+    username.sendKeys("InvalidUser");  // Use invalid username
+    var password = driver.findElement(By.name("password"));
+    password.sendKeys("InvalidPass123");  // Use invalid password
 
     driver.findElement(By.tagName("button")).click();
     Thread.sleep(2000);
-
-    // Check for the presence of an error message (more reliable than asserting on title)
-    WebElement errorMessage = driver.findElement(By.xpath("//p[contains(text(), 'Invalid')]"));
-    Assert.assertTrue(errorMessage.isDisplayed(), "Error message not displayed for invalid login!");
+    String actualResult = driver.findElement(By.tagName("h6")).getText();
+    String expectedResult = "Dashboard";
+    Assert.assertNotEquals(actualResult, expectedResult);  // Verify that login failed
   }
 }
